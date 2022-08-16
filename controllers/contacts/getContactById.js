@@ -7,9 +7,10 @@ const getContactById = async (req, res, next) => {
     const result = await contacts.getContactById(contactId);
 
     if (!result) {
-      throw RequestError(404, "Not found");
+      throw RequestError({ status: "Not found", code: 404 });
     }
-    res.json(result);
+    // res.json(result);
+    res.json({ status: "Success", code: 200, payload: { result } });
   } catch (error) {
     next(error);
   }

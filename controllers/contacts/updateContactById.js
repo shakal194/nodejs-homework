@@ -10,11 +10,15 @@ const updateContactById = async (req, res, next) => {
     }
 
     const { contactId } = req.params;
+
     const result = await contacts.updateContactById(contactId, req.body);
+
+    console.log(result);
     if (!result) {
-      throw RequestError(404, "Not found");
+      throw RequestError({ status: "Not found", code: 404 });
     }
-    res.json(result);
+    // res.json(result);
+    res.json({ status: "Contact updated", code: 200, payload: { result } });
   } catch (error) {
     next(error);
   }

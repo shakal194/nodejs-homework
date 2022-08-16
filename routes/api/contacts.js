@@ -3,8 +3,6 @@ const Joi = require("joi");
 
 const contacts = require("../../models/contacts");
 
-const { RequestError } = require("../../helpers");
-
 const controller = require("../../controllers/contacts");
 
 console.log(contacts);

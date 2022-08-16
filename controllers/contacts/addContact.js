@@ -5,12 +5,12 @@ const addContact = async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
-      throw RequestError(400, error.message);
+      throw RequestError({ status: "Not Found", code: 404 });
     }
     const body = { ...req.body };
 
     const result = await contacts.addContact(body);
-    res.status(201).json(result);
+    res.json({ status: "Created Success", code: 201, payload: { result } });
   } catch (error) {
     next(error);
   }
