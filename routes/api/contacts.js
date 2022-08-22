@@ -1,7 +1,7 @@
 const express = require("express");
 // const { isValidId } = require("../../helpers");
 const { schemas } = require("../../models/contact");
-const { validationBody, isValidId } = require("../../helpers");
+const { validationBody, isValidId } = require("../../middleware");
 
 const controller = require("../../controllers/contacts");
 const controller_test = require("../../services");
