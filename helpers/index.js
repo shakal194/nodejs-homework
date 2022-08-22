@@ -1,7 +1,13 @@
 const RequestError = require("./RequestError");
-const contactsSchema = require("./contactsSchema");
+const DB_HOST = require("./config");
+const handleSchemaValidationError = require("./handleSchemaValidationError");
+const validationBody = require("./validationBody");
+const isValidId = require("./isValidId");
 
 module.exports = {
   RequestError,
-  contactsSchema,
+  DB_HOST,
+  handleSchemaValidationError,
+  validationBody,
+  isValidId,
 };

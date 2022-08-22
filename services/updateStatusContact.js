@@ -1,6 +1,6 @@
 const { Contact } = require("../models/contact");
 
-const updateContactById = async (id, body) => {
+const updateStatusContact = async (id, body) => {
   try {
     const data = await Contact.findByIdAndUpdate(id, body, {
       new: true,
@@ -11,4 +11,4 @@ const updateContactById = async (id, body) => {
   }
 };
 
-module.exports = updateContactById;
+module.exports = updateStatusContact;

@@ -9,7 +9,6 @@ const getContactById = async (req, res, next) => {
     if (!result) {
       throw RequestError({ status: "Not found", code: 404 });
     }
-    // res.json(result);
     res.json({ status: "Success", code: 200, payload: { result } });
   } catch (error) {
     next(error);

@@ -1,9 +1,10 @@
 const contacts = require("../../services");
-const { RequestError, contactsSchema } = require("../../helpers");
+const { RequestError } = require("../../helpers");
+const { schemas } = require("../../models/contact");
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = contactsSchema.validate(req.body);
+    const { error } = schemas.addSchema.validate(req.body);
     if (error) {
       throw RequestError({ status: "Not Found", code: 404 });
     }
