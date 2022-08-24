@@ -1,28 +1,3 @@
-// const contacts = require("../../services/contactsService");
-// const { RequestError } = require("../../helpers");
-
-// const updateStatusContact = async (req, res) => {
-//   try {
-//     const { error } = schemas.updateFavoriteSchema.validate(req.body);
-//     if (error) {
-//       throw RequestError(400, error.message);
-//     }
-
-//     const { contactId } = req.params;
-
-//     const result = await contacts.updateStatusContact(contactId, req.body);
-
-//     if (!result) {
-//       throw RequestError({ status: `Contact with id=${contactId} not found`, code: 404 });
-//     }
-//     res.json({ status: "Contact updated", code: 200, payload: { result } });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// module.exports = updateStatusContact;
-
 // const { Contacts } = require("../../models/contact");
 // const { RequestError } = require("../../helpers");
 // const updateStatusContact = async (req, res) => {
@@ -46,12 +21,6 @@ const contacts = require("../../services/contactsService");
 const { RequestError } = require("../../helpers");
 
 const updateStatusContact = async (req, res) => {
-  //   // try {
-  //   //   const { error } = schemas.updateFavoriteSchema.validate(req.body);
-  //   //   if (error) {
-  //   //     throw RequestError(400, error.message);
-  //   //   }
-
   const { contactId } = req.params;
   const { favorite } = req.body;
 
@@ -60,7 +29,11 @@ const updateStatusContact = async (req, res) => {
   if (!result) {
     throw RequestError({ status: `Contact with id=${contactId} not found`, code: 404 });
   }
-  res.json({ status: "Contact updated", code: 200, payload: { result } });
+  res.json({
+    status: `Contact with id=${contactId} updated`,
+    code: 200,
+    payload: { result },
+  });
 };
 
 module.exports = updateStatusContact;
