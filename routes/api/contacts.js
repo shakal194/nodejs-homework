@@ -3,7 +3,6 @@ const { schemas } = require("../../models/contact");
 const { validationBody, isValidId } = require("../../middleware");
 
 const controller = require("../../controllers/contacts");
-// const controller_test = require("../../controllers/contacts");
 
 const router = express.Router();
 
@@ -25,7 +24,7 @@ router.patch(
   "/:contactId/favorite",
   isValidId,
   validationBody(schemas.updateFavoriteSchema),
-  controller.updateStatusContact
+  controller.updateFavorite
 );
 
 module.exports = router;

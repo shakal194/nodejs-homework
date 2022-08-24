@@ -47,15 +47,15 @@ const updateContactById = async (contactId, body) => {
   }
 };
 
-const updateStatusContact = async (contactId, body) => {
-  // try {
-  const data = await Contacts.findByIdAndUpdate(contactId, body, {
-    new: true,
-  });
-  return data;
-  // } catch (err) {
-  //   console.log(err.message);
-  // }
+const updateFavorite = async (contactId, body) => {
+  try {
+    const data = await Contacts.findByIdAndUpdate(contactId, body, {
+      new: true,
+    });
+    return data;
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 module.exports = {
@@ -64,5 +64,5 @@ module.exports = {
   deleteContactById,
   getContactById,
   updateContactById,
-  updateStatusContact,
+  updateFavorite,
 };
