@@ -1,25 +1,15 @@
-const contacts = require("../../services");
+const contacts = require("../../services/contactsService");
 const { RequestError } = require("../../helpers");
-const { schemas } = require("../../models/contact");
 
 const updateContactById = async (req, res, next) => {
-  try {
-    const { error } = schemas.addSchema.validate(req.body);
-    if (error) {
-      throw RequestError(400, error.message);
-    }
+  const { contactId } = req.params;
 
-    const { contactId } = req.params;
+  const result = await contacts.updateContactById(contactId, req.body);
 
-    const result = await contacts.updateContactById(contactId, req.body);
-
-    if (!result) {
-      throw RequestError({ status: "Not found", code: 404 });
-    }
-    res.json({ status: "Contact updated", code: 200, payload: { result } });
-  } catch (error) {
-    next(error);
+  if (!result) {
+    throw RequestError({ status: `Contact with id=${contactId} not found`, code: 404 });
   }
+  res.json({ status: "Contact updated", code: 200, payload: { result } });
 };
 
 module.exports = updateContactById;

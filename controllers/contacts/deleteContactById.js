@@ -1,4 +1,4 @@
-const contacts = require("../../services");
+const contacts = require("../../services/contactsService");
 const { RequestError } = require("../../helpers");
 
 const deleteContactById = async (req, res, next) => {
@@ -7,7 +7,7 @@ const deleteContactById = async (req, res, next) => {
     const result = await contacts.deleteContactById(contactId);
     console.log(result);
     if (!result) {
-      throw RequestError({ status: "Not found", code: 404 });
+      throw RequestError({ status: `Contact with id=${contactId} not found`, code: 404 });
     }
     res.json({ status: "Contact deleted", code: 200, payload: { result } });
   } catch (error) {

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { DB_HOST, PORT = 3000 } = require("./helpers");
+const { DB_HOST, PORT } = require("./helpers");
 const app = require("./app");
 
 mongoose
