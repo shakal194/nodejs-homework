@@ -1,10 +1,11 @@
 const contacts = require("../../services/contactsService");
 const { RequestError } = require("../../helpers");
 
-const updateContactById = async (req, res) => {
+const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
+  const { favorite } = req.body;
 
-  const result = await contacts.updateContactById(contactId, req.body);
+  const result = await contacts.updateFavorite(contactId, { favorite });
 
   if (!result) {
     throw RequestError({ status: `Contact with id=${contactId} not found`, code: 404 });
@@ -16,4 +17,4 @@ const updateContactById = async (req, res) => {
   });
 };
 
-module.exports = updateContactById;
+module.exports = updateFavorite;

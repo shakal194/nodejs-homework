@@ -1,4 +1,4 @@
-const contacts = require("../../services");
+const contacts = require("../../services/contactsService");
 const { RequestError } = require("../../helpers");
 
 const getContactById = async (req, res, next) => {
@@ -7,10 +7,13 @@ const getContactById = async (req, res, next) => {
     const result = await contacts.getContactById(contactId);
 
     if (!result) {
-      throw RequestError({ status: "Not found", code: 404 });
+      throw RequestError({ status: `Contact with id=${contactId} not found`, code: 404 });
     }
-    // res.json(result);
-    res.json({ status: "Success", code: 200, payload: { result } });
+    res.json({
+      status: `Contact with id=${contactId} founded`,
+      code: 200,
+      payload: { result },
+    });
   } catch (error) {
     next(error);
   }
