@@ -15,6 +15,11 @@ const contactSchema = new Schema(
       required: [true, "Phone must be exist"],
     },
     favorite: { type: Boolean, default: false },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -43,6 +48,6 @@ const schemas = {
   updateFavoriteSchema,
 };
 
-const Contacts = model("contact", contactSchema);
+const Contact = model("contact", contactSchema);
 
-module.exports = { Contacts, schemas };
+module.exports = { Contact, schemas };

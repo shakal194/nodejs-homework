@@ -5,7 +5,6 @@ const deleteContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.deleteContactById(contactId);
-    console.log(result);
     if (!result) {
       throw RequestError({ status: `Contact with id=${contactId} not found`, code: 404 });
     }
