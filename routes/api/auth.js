@@ -1,11 +1,5 @@
 const express = require("express");
 
-// const Jimp = require("jimp");
-// const fs = require("fs/promises");
-// const path = require("path");
-// const { User } = require("../../models/user");
-// const avatarDir = path.join(__dirname, "../../", "public", "avatars");
-
 const { schemas } = require("../../models/user");
 const { authenticate, validationBody, upload } = require("../../middleware");
 
@@ -29,16 +23,12 @@ router.post(
 
 router.get("/logout", authenticate, ctrlWrapper(controller.logoutController));
 
-router.get(
-  "/current",
-  authenticate,
-  validationBody(schemas.subscriptionSchema),
-  ctrlWrapper(controller.getCurrentController)
-);
+router.get("/current", authenticate, ctrlWrapper(controller.getCurrentController));
 
 router.patch(
-  "/:userId",
+  "/",
   authenticate,
+  validationBody(schemas.subscriptionSchema),
   ctrlWrapper(controller.updateSubscriptionController)
 );
 

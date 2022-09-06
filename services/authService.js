@@ -54,8 +54,8 @@ const logout = async (userId) => {
   return userLogout;
 };
 
-const updateSubcription = async (userId, body) => {
-  const data = await User.findByIdAndUpdate(userId, body, {
+const updateSubcription = async (userId, subscription) => {
+  const data = await User.findByIdAndUpdate(userId, subscription, {
     new: true,
   });
   return data;
