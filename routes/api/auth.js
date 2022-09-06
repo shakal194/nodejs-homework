@@ -1,7 +1,13 @@
 const express = require("express");
 
+// const Jimp = require("jimp");
+// const fs = require("fs/promises");
+// const path = require("path");
+// const { User } = require("../../models/user");
+// const avatarDir = path.join(__dirname, "../../", "public", "avatars");
+
 const { schemas } = require("../../models/user");
-const { authenticate, validationBody } = require("../../middleware");
+const { authenticate, validationBody, upload } = require("../../middleware");
 
 const { ctrlWrapper } = require("../../helpers");
 
@@ -34,6 +40,13 @@ router.patch(
   "/:userId",
   authenticate,
   ctrlWrapper(controller.updateSubscriptionController)
+);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlWrapper(controller.updateAvatarController)
 );
 
 module.exports = router;

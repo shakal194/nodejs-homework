@@ -3,6 +3,13 @@ const { RequestError } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../helpers");
+const fs = require("fs/promises");
+const path = require("path");
+const Jimp = require("jimp");
+
+const gravatar = require("gravatar");
+
+const avatarsDir = path.join(__dirname, "..", "public", "avatars");
 
 const registration = async (email, password) => {
   try {
@@ -11,7 +18,8 @@ const registration = async (email, password) => {
       throw RequestError(409, `Email ${email} already exist`);
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    const data = await User.create({ email, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+    const data = await User.create({ email, password: hashPassword, avatarURL });
     return data;
   } catch (err) {
     console.error(err);
@@ -53,4 +61,36 @@ const updateSubcription = async (userId, body) => {
   return data;
 };
 
-module.exports = { registration, login, logout, updateSubcription };
+const updateAvatar = async (userId, originalName, tempPath) => {
+  const [extention] = originalName.split(".").reverse();
+  const newName = `${userId}.${extention}`;
+  const updatePath = path.join(avatarsDir, newName);
+
+  fs.rename(tempPath, updatePath);
+
+  const avatarURL = path.join("avatars", newName);
+  const minAvatarURL = path.join("public", "avatars", newName);
+
+  Jimp.read(minAvatarURL, (err, newName) => {
+    if (err) throw err;
+    newName.resize(250, 250).quality(60).write(minAvatarURL);
+  });
+
+  await User.findByIdAndUpdate(
+    userId,
+    { avatarURL: minAvatarURL },
+    {
+      new: true,
+    }
+  );
+
+  return avatarURL;
+};
+
+module.exports = {
+  registration,
+  login,
+  logout,
+  updateSubcription,
+  updateAvatar,
+};
