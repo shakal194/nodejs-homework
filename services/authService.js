@@ -1,11 +1,12 @@
 const { User } = require("../models/user");
-const { RequestError } = require("../helpers");
+const { RequestError, sendEmail } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../helpers");
 const fs = require("fs/promises");
 const path = require("path");
 const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
 
 const gravatar = require("gravatar");
 
@@ -19,7 +20,19 @@ const registration = async (email, password) => {
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
-    const data = await User.create({ email, password: hashPassword, avatarURL });
+    const verificationToken = nanoid();
+    const data = await User.create({
+      email,
+      password: hashPassword,
+      avatarURL,
+      verificationToken,
+    });
+    const mail = {
+      to: email,
+      subject: "Confirm email",
+      html: `Click link to confirm your email<br><a href="http://localhost:3000/api/auth/verify/${verificationToken}" target="_blank">CONFIRM EMAIL</a>`,
+    };
+    await sendEmail(mail);
     return data;
   } catch (err) {
     console.error(err);
@@ -87,10 +100,51 @@ const updateAvatar = async (userId, originalName, tempPath) => {
   return avatarURL;
 };
 
+const verifyEmail = async (verificationToken) => {
+  const user = await User.findOne({ verificationToken, tokenIsActive: true });
+  if (!user) {
+    throw RequestError(404, "This email verificated or not found");
+  }
+  user.tokenIsActive = false;
+  user.verify = true;
+
+  await User.findByIdAndUpdate(user._id, {
+    verificationToken: null,
+    verify: true,
+  });
+
+  const mail = {
+    to: user.email,
+    subject: "Registration success!",
+    text: `You successfully registered! Good job`,
+  };
+
+  await sendEmail(mail);
+};
+
+const resendVerifyEmail = async (email) => {
+  const user = await User.findOne({ email, verify: false });
+  if (!user) {
+    throw RequestError(404, `User with ${email} not found`);
+  }
+  if (user.verify) {
+    throw RequestError(400, `User with ${email}  already verify`);
+  }
+  const mail = {
+    to: email,
+    subject: "Confirm email",
+    html: `Click link to confirm your email<br><a href="http://localhost:3000/api/auth/verify/${user.verificationToken}" target="_blank">CONFIRM EMAIL</a>`,
+  };
+  await sendEmail(mail);
+  return user;
+};
+
 module.exports = {
   registration,
   login,
   logout,
   updateSubcription,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 };

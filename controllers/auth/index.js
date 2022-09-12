@@ -4,6 +4,8 @@ const logoutController = require("./logout");
 const getCurrentController = require("./getCurrent");
 const updateSubscriptionController = require("./updateSubscription");
 const updateAvatarController = require("./updateAvatarController");
+const verifyEmail = require("./verifyEmail");
+const resendVerifyEmail = require("./resendVerifyEmail");
 
 module.exports = {
   registrationController,
@@ -12,4 +14,6 @@ module.exports = {
   getCurrentController,
   updateSubscriptionController,
   updateAvatarController,
+  verifyEmail,
+  resendVerifyEmail,
 };
