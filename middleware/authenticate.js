@@ -11,15 +11,20 @@ const authenticate = async (req, res, next) => {
     next(RequestError(401, "Unauthorized"));
   }
 
-  try {
-    const { id } = jwt.verify(token, SECRET_KEY);
+  if (!token) {
+    next(RequestError(401, "No token provided"));
+  }
 
-    const user = await User.findById(id);
+  try {
+    // const { _id } =
+    jwt.verify(token, SECRET_KEY);
+    const user = await User.findOne({ token });
 
     if (!user || !user.token) {
-      next(RequestError(401, "Unauthorized1"));
+      next(RequestError(401, "Unauthorized"));
     }
     req.user = user;
+
     next();
   } catch (err) {
     next(RequestError(401, err.message));

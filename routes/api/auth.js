@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { schemas } = require("../../models/user");
-const { authenticate, validationBody } = require("../../middleware");
+const { authenticate, validationBody, upload } = require("../../middleware");
 
 const { ctrlWrapper } = require("../../helpers");
 
@@ -23,17 +23,20 @@ router.post(
 
 router.get("/logout", authenticate, ctrlWrapper(controller.logoutController));
 
-router.get(
-  "/current",
+router.get("/current", authenticate, ctrlWrapper(controller.getCurrentController));
+
+router.patch(
+  "/",
   authenticate,
   validationBody(schemas.subscriptionSchema),
-  ctrlWrapper(controller.getCurrentController)
+  ctrlWrapper(controller.updateSubscriptionController)
 );
 
 router.patch(
-  "/:userId",
+  "/avatars",
   authenticate,
-  ctrlWrapper(controller.updateSubscriptionController)
+  upload.single("avatar"),
+  ctrlWrapper(controller.updateAvatarController)
 );
 
 module.exports = router;
